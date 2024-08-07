@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta authour="Beshoy Ashraf">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تماسيح الجو</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://dailyverses.net/favicon-32x32.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=IBM+Plex+Sans+Arabic&display=swap');
+        
+        body {
+            font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #initial-screen, #quote-screen {
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 100px;
+            margin-bottom: 20px;
+        }
+
+        .arabic-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 80%;
+            height: 10px;
+            background-color: #ddd;
+            margin: 0 auto;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0;
+            background-color: #4caf50;
+            transition: width 6s linear;
+        }
+
+        #message-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        #message-button:hover {
+            background-color: #28a745;
+            transform: scale(1.05);
+        }
+
+        #quote-display {
+            margin-top: 20px;
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+    <div id="initial-screen">
+        <div class="content">
+            <img src="https://lh3.googleusercontent.com/TMa6zu61SstTqLIsvz38ifWQrWsBuOvFxNDYgsffGEwoRQUzGFOzyzNa3afFzypj3o0zFGlnXH_rEIV1oy1DI80=w1280" alt="Logo" class="logo">
+            <p class="arabic-text">
+                رهط تماسيح الجو
+                <br>
+                من فريق جوالة
+                <Br>
+                    يقدم
+            </p>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+    <div id="quote-screen" class="hidden">
+        <button id="message-button">Your Message</button>
+        <p id="quote-display"></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.querySelector('.progress');
+            const initialScreen = document.getElementById('initial-screen');
+            const quoteScreen = document.getElementById('quote-screen');
+            const messageButton = document.getElementById('message-button');
+            const quoteDisplay = document.getElementById('quote-display');
+
+            const quotes = [
+                "افْرَحُوا فِي الرَّبِّ دَائِماً، وَأَقُولُ أَيْضاً: افْرَحُوا.\nفِيلِبِّي ٤:‏٤",
+                "فَرِحِينَ بِالرَّجَاءِ، صَابِرِينَ فِي الضِّيقِ، مُوَاظِبِينَ عَلَى الصَّلاةِ.\nرُومِيَةَ ١٢:‏١٢",
+                "حَتَّى الآنَ لَمْ تَطْلُبُوا بِاسْمِي شَيْئاً. اطْلُبُوا تَنَالُوا، فَيَكُونَ فَرَحُكُمْ كَامِلاً.\nيُوحَنَّا ١٦:‏٢٤",
+                "فَرِّحْ نَفْسَ عَبْدِكَ، لأَنَّنِي إِلَيْكَ يَا رَبُّ أَرْفَعُ نَفْسِي.\nسفر المزامير 86: 4",
+                "عَظَّمَ الرَّبُّ الْعَمَلَ مَعَنَا، وَصِرْنَا فَرِحِينَ.\nسفر المزامير 126: 3",
+                "الرَّبُّ يَهْتَمُّ بِي. عَوْنِي وَمُنْقِذِي أَنْتَ. يَا إِلهِي لاَ تُبْطِئْ.\nسفر المزامير 40: 17",
+                "الرَّبُّ يَحْفَظُكَ مِنْ كُلِّ سُوءٍ. يَحْفَظُ نَفْسَكَ. الرَّبُّ يَحْفَظُ خُرُوجَكَ وَدُخُولَكَ مِنَ الآنَ وَإِلَى الدَّهْرِ.\nسفر المزامير 121: 7، 8",
+                "قَلْبُ ٱلْإِنْسَانِ يُفَكِّرُ فِي طَرِيقِهِ، وَٱلرَّبُّ يَهْدِي خَطْوَتَهُ.\nأَمْثَالٌ ١٦:‏٩",
+                "أَرْفَعُ عَيْنَيَّ إِلَى ٱلْجِبَالِ، مِنْ حَيْثُ يَأْتِي عَوْنِي! مَعُونَتِي مِنْ عِنْدِ ٱلرَّبِّ، صَانِعِ ٱلسَّمَاوَاتِ وَٱلْأَرْضِ.\nاَلْمَزَامِيرُ ١٢١:‏١-‏٢",
+                "جَعَلْتُ ٱلرَّبَّ أَمَامِي فِي كُلِّ حِينٍ، لِأَنَّهُ عَنْ يَمِينِي فَلَا أَتَزَعْزَعُ.\nاَلْمَزَامِيرُ ١٦:‏٨",
+                "اِحْفَظْنِي يَا ٱللهُ لِأَنِّي عَلَيْكَ تَوَكَّلْتُ.\nاَلْمَزَامِيرُ ١٦:‏١",
+                "عَلَيْكَ يَا رَبُّ تَوَكَّلْتُ. لَا تَدَعْنِي أَخْزَى مَدَى ٱلدَّهْرِ. بِعَدْلِكَ نَجِّنِي.\nاَلْمَزَامِيرُ ٣١:‏١",
+                "مِنَ ٱلْأَعْمَاقِ صَرَخْتُ إِلَيْكَ يَا رَبُّ. يَا رَبُّ، ٱسْمَعْ صَوْتِي. لِتَكُنْ أُذُنَاكَ مُصْغِيَتَيْنِ إِلَى صَوْتِ تَضَرُّعَاتِي.\nاَلْمَزَامِيرُ ١٣٠:‏١-‏٢",
+                "وَتَجْعَلُ لِي تُرْسَ خَلَاصِكَ وَيَمِينُكَ تَعْضُدُنِي، وَلُطْفُكَ يُعَظِّمُنِي. تُوَسِّعُ خُطُوَاتِي تَحْتِي، فَلَمْ تَتَقَلْقَلْ عَقِبَايَ.\nاَلْمَزَامِيرُ ١٨:‏٣٥-‏٣٦",
+                "ٱلِٱحْتِمَاءُ بِٱلرَّبِّ خَيْرٌ مِنَ ٱلتَّوَكُّلِ عَلَى إِنْسَانٍ.\nاَلْمَزَامِيرُ ١١٨:‏٨",
+                "كُلُّ كَلِمَةٍ مِنَ ٱللهِ نَقِيَّةٌ. تُرْسٌ هُوَ لِلْمُحْتَمِينَ بِهِ.\nأَمْثَالٌ ٣٠:‏٥"
+            ];
+
+            // Start progress bar animation
+            progressBar.style.width = '100%';
+
+            // After 6 seconds, switch to the quote screen
+            setTimeout(() => {
+                initialScreen.classList.add('hidden');
+                quoteScreen.classList.remove('hidden');
+            }, 6000);
+
+            // Handle button click to display random quote
+            messageButton.addEventListener('click', () => {
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                quoteDisplay.textContent = randomQuote;
+            });
+        });
+    </script>
+</body>
+</html>
+
+<!--Code By: Beshoy Ashraf-->
+<!-- Mohdrt New Team 2024 Mn Fry2 Gwala (Tmasi7 L gw)-->
